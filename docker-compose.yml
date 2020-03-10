@@ -1,0 +1,43 @@
+version: '2'
+
+services:
+  docker-mysql:
+    restart: always
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=stepout
+      - MYSQL_PASSWORD=root
+    volumes:
+      - ./mysql/data:/docker-entrypoint-initdb.d
+    ports:
+      - "3307:3306"
+    
+  itemOrderService:
+    image: item-order-service:dev
+    build:
+      context: ./itemOrderService
+      dockerfile: ./Dockerfile
+    depends_on:
+      - docker-mysql
+    ports:
+      - "1000:1000"
+  itemOrderSystem:
+    image: item_order_system:dev
+    build:
+      context: ./itemOrderSystem
+      dockerfile: ./Dockerfile
+    ports:
+      - "80:80"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: my-php-myadmin
+    ports:
+      - "8082:80"
+    restart: always
+    depends_on:
+      - docker-mysql
+    environment:
+      - PMA_HOST=docker-mysql
+      - PMA_PORT= 3306
