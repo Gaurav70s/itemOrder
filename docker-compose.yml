@@ -14,19 +14,25 @@ services:
       - "3307:3306"
     
   itemOrderService:
-    image: item-order-service:dev
+    image: item_order_service:1.1
     build:
       context: ./itemOrderService
       dockerfile: ./Dockerfile
+    volumes:
+      - ./item/images:/usr/app/images 
     depends_on:
       - docker-mysql
     ports:
       - "1000:1000"
   itemOrderSystem:
-    image: item_order_system:dev
+    image: item_order_system:1.1
     build:
       context: ./itemOrderSystem
       dockerfile: ./Dockerfile
+    volumes:
+      - ./item/images:/var/app/images
+    depends_on:
+      - itemOrderService
     ports:
       - "80:80"
 

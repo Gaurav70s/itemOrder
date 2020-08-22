@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: item-order
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: item.order.no
+    http:
+      paths:
+      - path: /rest/item_order_service/v1
+        backend:
+          serviceName: item-order-service
+          servicePort: 8080
+      - path: /
+        backend:
+          serviceName: item-order-system
+          servicePort: 4200

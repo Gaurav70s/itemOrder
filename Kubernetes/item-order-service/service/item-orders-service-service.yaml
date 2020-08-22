@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: item-order-service
+spec:
+  selector:
+    type: backend 
+  type:  LoadBalancer
+  ports:
+  - name:  item-order-service
+    port:  1001
+    targetPort:  1001
